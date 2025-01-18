@@ -1,0 +1,128 @@
+1.1. Tabela produtos
+Esta tabela armazenará informações sobre os produtos vendidos no sacolão e açougue, incluindo nome, preço e categoria.
+
+sql
+Copiar
+CREATE TABLE produtos (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10, 2) NOT NULL,  -- Preço por unidade
+    categoria VARCHAR(50),  -- Ex: Frutas, Carnes, etc.
+    unidade_medida VARCHAR(20),  -- Ex: kg, unidade, litro
+    estoque_atual INT NOT NULL,  -- Quantidade disponível
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+1.2. Tabela clientes
+Esta tabela armazenará informações sobre os clientes, para que você possa registrar as compras e até associar um cliente a um histórico de compras.
+
+sql
+Copiar
+CREATE TABLE clientes (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    cpf VARCHAR(14) UNIQUE,
+    telefone VARCHAR(15),
+    email VARCHAR(255),
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+1.3. Tabela funcionarios
+Essa tabela armazenará informações sobre os funcionários que operam o PDV, facilitando o controle de quem fez cada venda.
+
+sql
+Copiar
+CREATE TABLE funcionarios (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    cargo VARCHAR(50),  -- Ex: Caixa, Açougueiro, Estoquista
+    salario DECIMAL(10, 2),
+    data_admissao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+1.4. Tabela vendas
+Esta tabela armazenará as informações das vendas realizadas. Cada venda será associada a um cliente (opcional) e a um funcionário (quem fez a venda).
+
+sql
+Copiar
+CREATE TABLE vendas (
+    id SERIAL PRIMARY KEY,
+    cliente_id INT REFERENCES clientes(id) ON DELETE SET NULL,
+    funcionario_id INT REFERENCES funcionarios(id),
+    data_venda TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(10, 2) NOT NULL,
+    pagamento_status VARCHAR(20),  -- Ex: Pendente, Pago
+    tipo_pagamento VARCHAR(20)  -- Ex: Dinheiro, Cartão, PIX
+);
+1.5. Tabela itens_venda
+Esta tabela armazenará os itens de cada venda. Ou seja, os produtos vendidos em uma venda específica. Como pode haver múltiplos itens por venda, criamos uma tabela separada para isso.
+
+sql
+Copiar
+CREATE TABLE itens_venda (
+    id SERIAL PRIMARY KEY,
+    venda_id INT REFERENCES vendas(id) ON DELETE CASCADE,
+    produto_id INT REFERENCES produtos(id),
+    quantidade DECIMAL(10, 2) NOT NULL,  -- Quantidade de produto vendido
+    preco_unitario DECIMAL(10, 2) NOT NULL,  -- Preço do produto no momento da venda
+    subtotal DECIMAL(10, 2) NOT NULL  -- Preço unitário * quantidade
+);
+1.6. Tabela pagamentos
+Esta tabela armazenará informações sobre os pagamentos, como a forma de pagamento e valores.
+
+sql
+Copiar
+CREATE TABLE pagamentos (
+    id SERIAL PRIMARY KEY,
+    venda_id INT REFERENCES vendas(id) ON DELETE CASCADE,
+    forma_pagamento VARCHAR(50),  -- Ex: Dinheiro, Cartão, PIX
+    valor DECIMAL(10, 2) NOT NULL,  -- Valor pago
+    data_pagamento TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+2. Outras Tabelas (Auxiliares)
+2.1. Tabela categorias
+Essa tabela pode ser útil para organizar os produtos por categorias, como "Frutas", "Carnes", "Verduras", "Laticínios", etc.
+
+sql
+Copiar
+CREATE TABLE categorias (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL
+);
+2.2. Tabela estoques
+Se você deseja ter um controle de entrada e saída de estoque (como em um processo de inventário), pode adicionar uma tabela para registrar esses movimentos.
+
+sql
+Copiar
+CREATE TABLE estoques (
+    id SERIAL PRIMARY KEY,
+    produto_id INT REFERENCES produtos(id),
+    quantidade INT NOT NULL,  -- Quantidade que entrou ou saiu
+    tipo_movimento VARCHAR(20),  -- Ex: Entrada, Saída
+    data_movimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    observacao TEXT
+);
+3. Relacionamentos
+Produto ↔ Categoria: O produto pode ter uma categoria, então, a tabela produtos pode ter uma chave estrangeira para categorias. Isso ajuda a organizar os produtos no sistema e facilita relatórios.
+Venda ↔ Cliente: O cliente pode ser opcional, mas associar uma venda a um cliente facilita o histórico de compras.
+Venda ↔ Funcionário: Relacionamento importante para controle de quem realizou a venda no PDV.
+Venda ↔ Itens de Venda: A tabela itens_venda armazena os produtos específicos vendidos em cada transação.
+Venda ↔ Pagamento: O pagamento de uma venda é registrado na tabela pagamentos, permitindo registrar diferentes formas de pagamento.
+4. Exemplo de Fluxo de Dados
+Cadastro de Produto: Quando um novo produto é adicionado ao sistema, ele será inserido na tabela produtos com informações como nome, preço, unidade de medida, categoria, etc.
+Venda de Produto: Durante uma venda, o PDV vai registrar a venda na tabela vendas, associando um cliente e funcionário (se necessário). Em seguida, cada produto vendido será inserido na tabela itens_venda junto com a quantidade e preço.
+Pagamento: Após a venda, o pagamento será registrado na tabela pagamentos, indicando como o pagamento foi feito (dinheiro, cartão, PIX, etc.).
+Controle de Estoque: Cada venda que envolve um produto afetará a quantidade de estoque, que pode ser controlada pela tabela estoques (movimentos de entrada e saída).
+5. Considerações Adicionais
+Gestão de Preços: É importante permitir o controle de preços históricos. Se os preços dos produtos podem mudar com frequência, você pode considerar uma tabela adicional para histórico de preços, associando cada preço a uma data.
+
+sql
+Copiar
+CREATE TABLE precos_produtos (
+    id SERIAL PRIMARY KEY,
+    produto_id INT REFERENCES produtos(id),
+    preco DECIMAL(10, 2) NOT NULL,
+    data_inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+Relatórios: A modelagem proposta facilita a geração de relatórios de vendas, controle de estoque, performance de funcionários, etc.
+
+Segurança: Caso o PDV envolva múltiplos usuários, é essencial ter controle de permissões para garantir que apenas usuários autorizados 
+possam acessar certas funcionalidades (como a criação de novos produtos ou alteração de preços).

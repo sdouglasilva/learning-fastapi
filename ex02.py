@@ -5,5 +5,5 @@ from fastapi.responses import HTMLResponse
 app = FastAPI()
 @app.get('/home')
 def exibir_titulo():
-    return HTMLResponse('<H1>Títutlo do Meu Site</H1>')
+    return HTMLResponse('<h1>My First render text<\h1>')
 

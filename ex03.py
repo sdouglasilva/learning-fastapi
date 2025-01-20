@@ -39,14 +39,14 @@ def listar_todos_animais():
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     return JSONResponse(content=animais, status_code=status.HTTP_200_OK)
 ##Criação da rota para busar um animal espefífico da lista.
-@app.get('/animais/{id}')
-def listar_animal_especifico(id:int):
+@app.get('/animais/{id}')#{id}Path
+def listar_animal_especifico(id:int):#Query
     """Função para percorrer a lista de animais
     """
     #Para cada animal na lista, verifica se o parametro é igual a query desejada.
     for animal in animais:
         ### animal.get('id') - Query
-        ### id - Param
+        ### id - Path
         if animal.get('id') == id:
             return animal
     return JSONResponse(

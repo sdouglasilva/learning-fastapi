@@ -1,8 +1,7 @@
 1.1. Tabela produtos
 Esta tabela armazenará informações sobre os produtos vendidos no sacolão e açougue, incluindo nome, preço e categoria.
 
-sql
-Copiar
+
 CREATE TABLE produtos (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
@@ -16,8 +15,7 @@ CREATE TABLE produtos (
 1.2. Tabela clientes
 Esta tabela armazenará informações sobre os clientes, para que você possa registrar as compras e até associar um cliente a um histórico de compras.
 
-sql
-Copiar
+
 CREATE TABLE clientes (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
@@ -29,8 +27,7 @@ CREATE TABLE clientes (
 1.3. Tabela funcionarios
 Essa tabela armazenará informações sobre os funcionários que operam o PDV, facilitando o controle de quem fez cada venda.
 
-sql
-Copiar
+
 CREATE TABLE funcionarios (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
@@ -41,8 +38,7 @@ CREATE TABLE funcionarios (
 1.4. Tabela vendas
 Esta tabela armazenará as informações das vendas realizadas. Cada venda será associada a um cliente (opcional) e a um funcionário (quem fez a venda).
 
-sql
-Copiar
+
 CREATE TABLE vendas (
     id SERIAL PRIMARY KEY,
     cliente_id INT REFERENCES clientes(id) ON DELETE SET NULL,
@@ -55,8 +51,7 @@ CREATE TABLE vendas (
 1.5. Tabela itens_venda
 Esta tabela armazenará os itens de cada venda. Ou seja, os produtos vendidos em uma venda específica. Como pode haver múltiplos itens por venda, criamos uma tabela separada para isso.
 
-sql
-Copiar
+
 CREATE TABLE itens_venda (
     id SERIAL PRIMARY KEY,
     venda_id INT REFERENCES vendas(id) ON DELETE CASCADE,
@@ -68,8 +63,7 @@ CREATE TABLE itens_venda (
 1.6. Tabela pagamentos
 Esta tabela armazenará informações sobre os pagamentos, como a forma de pagamento e valores.
 
-sql
-Copiar
+
 CREATE TABLE pagamentos (
     id SERIAL PRIMARY KEY,
     venda_id INT REFERENCES vendas(id) ON DELETE CASCADE,
@@ -81,8 +75,7 @@ CREATE TABLE pagamentos (
 2.1. Tabela categorias
 Essa tabela pode ser útil para organizar os produtos por categorias, como "Frutas", "Carnes", "Verduras", "Laticínios", etc.
 
-sql
-Copiar
+
 CREATE TABLE categorias (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50) NOT NULL
@@ -90,8 +83,7 @@ CREATE TABLE categorias (
 2.2. Tabela estoques
 Se você deseja ter um controle de entrada e saída de estoque (como em um processo de inventário), pode adicionar uma tabela para registrar esses movimentos.
 
-sql
-Copiar
+
 CREATE TABLE estoques (
     id SERIAL PRIMARY KEY,
     produto_id INT REFERENCES produtos(id),
@@ -114,8 +106,7 @@ Controle de Estoque: Cada venda que envolve um produto afetará a quantidade de 
 5. Considerações Adicionais
 Gestão de Preços: É importante permitir o controle de preços históricos. Se os preços dos produtos podem mudar com frequência, você pode considerar uma tabela adicional para histórico de preços, associando cada preço a uma data.
 
-sql
-Copiar
+
 CREATE TABLE precos_produtos (
     id SERIAL PRIMARY KEY,
     produto_id INT REFERENCES produtos(id),

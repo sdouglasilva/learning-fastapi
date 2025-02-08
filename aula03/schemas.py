@@ -13,3 +13,6 @@ class UserOut(BaseModel):
     email:str
     fl_active:bool
     created_at: datetime = datetime.now(timezone.utc)
+
+class MessageOut(BaseModel):
+    message: str

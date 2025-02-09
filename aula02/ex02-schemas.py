@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 app = FastAPI()
-
+#Nos esquemas eu posso criar um objeto para mensagens.
 class MessageReponse(BaseModel):
     message:str
 
@@ -19,7 +19,7 @@ def return_dict_message():
 
 #retornando uma reposta do formato de objeto
 @app.get('/object')
-def return_object_message()->MessageReponse:
+def return_object_message()-> MessageReponse:
     return{'message':'Hello World'}
 
 

@@ -14,6 +14,9 @@ class User(BaseModel):
     created_at: datetime = datetime.now(timezone.utc)#valor padrão para o momento da criação do objeto
 
 
+    
+
+
 
 
     

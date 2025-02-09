@@ -4,11 +4,6 @@ from models import User
 
 
 #Recebendo os dados de uma Request através do BOody
-class UserIn(BaseModel):
-    name:str
-    email:str
-    password:str
-
 #importando a classe EmailStr do pydantic
 class UserIn(BaseModel):
     name:str

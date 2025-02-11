@@ -3,6 +3,7 @@ requires-python = ">=3.12"
 
 [manifest]
 members = [
+    "api-cadastro-de-carros",
     "api-cadastro-de-pessoas",
     "aula-01",
 ]
@@ -29,6 +30,17 @@ sdist = { url = "https://files.pythonhosted.org/packages/a3/73/199a98fc2dae33535
 wheels = [
     { url = "https://files.pythonhosted.org/packages/46/eb/e7f063ad1fec6b3178a3cd82d1a3c4de82cccf283fc42746168188e1cdd5/anyio-4.8.0-py3-none-any.whl", hash = "sha256:b5011f270ab5eb0abf13385f851315585cc37ef330dd88e27ec3d34d651fd47a", size = 96041 },
 ]
+
+[[package]]
+name = "api-cadastro-de-carros"
+version = "0.1.0"
+source = { virtual = "aula02/exercises/api-cadastro-de-carros" }
+dependencies = [
+    { name = "fastapi", extra = ["standard"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "fastapi", extras = ["standard"], specifier = ">=0.115.6" }]
 
 [[package]]
 name = "api-cadastro-de-pessoas"

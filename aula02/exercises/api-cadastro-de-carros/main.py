@@ -1,6 +1,7 @@
 from fastapi import FastAPI, status
 from fastapi.responses import JSONResponse
-from schemas import CarIn
+from schemas import CarIn, MessageOut, CarOut
+from models import Car
 
 
 
@@ -8,19 +9,15 @@ cars_list = []
 app = FastAPI()
 
 @app.post("/carros")
-def add_car(car:CarIn):
-    carro1 = CarIn("Ford","Ka",2020,"AAA0001",50000)
+def add_car(car:CarIn) -> MessageOut:
+    carro1 = Car(**car.model_dump())
     cars_list.append(carro1)
-    return JSONResponse(content=cars_list,status_code=status.HTTP_200_OK)
-
-
-
-
-
-    
+    return MessageOut(message="Carro cadastrado com sucesso!")
 
 @app.get('/carros')
-def view_cars():
-    pass
+def view_all_cars()-> list[CarOut]:
+    if len(cars_list) == 0:
+        return MessageOut(message="Nenhum carro disponível para visulização")
+    return cars_list
 
 

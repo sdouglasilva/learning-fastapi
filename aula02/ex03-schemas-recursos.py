@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from uuid import UUID, uuid4
 from pydantic import BaseModel
 from datetime import datetime, timezone
-from models import User
 
 #Criando a classe para representar usuários da aplicação
 class User(BaseModel):

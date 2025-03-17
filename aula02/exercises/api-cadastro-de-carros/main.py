@@ -1,5 +1,4 @@
-from fastapi import FastAPI, status
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from schemas import CarIn, MessageOut, CarOut
 from models import Car
 
@@ -17,7 +16,7 @@ def add_car(car:CarIn) -> MessageOut:
 @app.get('/carros')
 def view_all_cars()-> list[CarOut]:
     if len(cars_list) == 0:
-        return MessageOut(message="Nenhum carro disponível para visulização")
+        return MessageOut(message="Nenhum carro disponível para visualização")
     return cars_list
 
 

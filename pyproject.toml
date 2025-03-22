@@ -10,4 +10,4 @@ dependencies = [
 ]
 
 [tool.uv.workspace]
-members = ["aula02/exercises/api-cadastro-de-pessoas", "aula02/exercises/api-cadastro-de-carros"]
+members = ["aula02/exercises/api-cadastro-de-pessoas", "aula02/exercises/api-cadastro-de-carros", "aula07/task-api"]

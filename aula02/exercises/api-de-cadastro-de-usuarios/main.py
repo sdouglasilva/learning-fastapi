@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from models import User
+from uuid import UUID
 from schemas import UserIn, UserOut, MessageOut
 from uuid import UUID
 
@@ -37,6 +38,13 @@ def listar_usuario_uuid(uudi:UUID)->UserOut:
 
     
 
+
+
+@app.get('users/{uuid}')
+def listar_usuario_id(uuid:UUID)-> UserOut:
+    for user_in_db in users_list:
+        if user_in_db.id == uuid:
+            return JSONResponse(content=user_in_db)
 
 
 

@@ -40,14 +40,6 @@ def listar_usuario_uuid(uudi:UUID)->UserOut:
 
 
 
-@app.get('users/{uuid}')
-def listar_usuario_id(uuid:UUID)-> UserOut:
-    for user_in_db in users_list:
-        if user_in_db.id == uuid:
-            return JSONResponse(content=user_in_db)
-
-
-
 
 
 
